@@ -1,7 +1,6 @@
 import React from 'react';
 
 const event = ({ event }) => {
-  console.log(event);
   return (
     <>
       <div>
