@@ -2,7 +2,7 @@ import React from 'react';
 
 const dropdown = props => {
   let options = [
-    <option key="alla" value="alla">
+    <option key="alla" value="Alla">
       Alla
     </option>
   ];
@@ -17,7 +17,7 @@ const dropdown = props => {
 
   return (
     <div className="form-select">
-      <select>{options}</select>
+      <select onChange={props.handleChange}>{options}</select>
     </div>
   );
 };

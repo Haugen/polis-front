@@ -12,7 +12,8 @@ class App extends Component {
     activeCategory: '',
     locations: [],
     activeLocation: '',
-    events: []
+    events: [],
+    activeQuery: ''
   };
 
   async componentDidMount() {
@@ -38,6 +39,48 @@ class App extends Component {
     });
   };
 
+  buildQuery = () => {
+    const location = this.state.activeLocation;
+    const category = this.state.activeCategory;
+    let query = '';
+    let queries = [];
+
+    if (location) {
+      queries.push(`location=${location}`);
+    }
+    if (category) {
+      queries.push(`category=${category}`);
+    }
+    if (queries.length > 0) {
+      query = `?${queries.join('&')}`;
+    }
+
+    this.setState(
+      {
+        activeQuery: query
+      },
+      () => this.getEvents(`${BASE_URL}/get-latest${query}`)
+    );
+  };
+
+  handleLocationChange = event => {
+    this.setState(
+      {
+        activeLocation: event.target.value !== 'Alla' ? event.target.value : ''
+      },
+      () => this.buildQuery()
+    );
+  };
+
+  handleCategoryChange = event => {
+    this.setState(
+      {
+        activeCategory: event.target.value !== 'Alla' ? event.target.value : ''
+      },
+      () => this.buildQuery()
+    );
+  };
+
   render() {
     return (
       <div className="container">
@@ -48,8 +91,14 @@ class App extends Component {
               ''
             ) : (
               <>
-                <Dropdown values={this.state.locations} />
-                <Dropdown values={this.state.categories} />
+                <Dropdown
+                  handleChange={this.handleLocationChange}
+                  values={this.state.locations}
+                />
+                <Dropdown
+                  handleChange={this.handleCategoryChange}
+                  values={this.state.categories}
+                />
                 <EventList events={this.state.events} />
               </>
             )}
